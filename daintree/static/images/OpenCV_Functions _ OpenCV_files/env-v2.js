@@ -1,0 +1,12 @@
+const site_domain='.analyticsvidhya.com'
+const google_initiate_url="https://id.analyticsvidhya.com/popup/auth/google/login"
+const identity_login_url="https://id.analyticsvidhya.com/popup/auth/login"
+const identity_signup_url="https://id.analyticsvidhya.com/popup/auth/signup"
+const one_tap_login_url="https://id.analyticsvidhya.com/automation/google/onetap/blog/login"
+const password_reset_url="https://id.analyticsvidhya.com/popup/auth/reset/password"
+const password_reset_send_otp_url="https://id.analyticsvidhya.com/popup/auth/reset/password/send/otp"
+const password_reset_verify_otp="https://id.analyticsvidhya.com/popup/auth/reset/password/verify/otp"
+const signup_verify_otp="https://id.analyticsvidhya.com/popup/confirm/email"
+const LINKEDIN_REDIRECT='https://id.analyticsvidhya.com/popup/auth/linkedin/login/callback/'
+const LINKEDIN_CLIENT_ID='8104l9q3fq9v5l'
+const LINKEDIN_AUTHORIZATION_ENDPOINT='https://www.linkedin.com/oauth/v2/authorization'
