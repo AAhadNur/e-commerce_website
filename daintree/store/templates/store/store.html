@@ -3,6 +3,25 @@
 
 {% block content %}
 
+<style>
+    .packet{
+        display: grid;
+        grid-template-columns: 1fr 5fr;
+    }
+</style>
+
+
+<div class="packet">
+
+    <div class="category">
+        <h3>Categories</h3>
+        <a href="{% url 'store' %}">All<br></a>
+        {% for category in categories %}
+        <a class="category-links" href="{% url 'store' %}?q={{category.name}}">{{category.name}}<br></a>
+        {% endfor %}
+    </div>
+
+
     <div class="row">
 
         {% for product in products %}
@@ -13,7 +32,7 @@
                 <h6><strong>{{product.name}}</strong></h6>
                 <hr>
                 <button data-product={{product.id}} data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to cart</button>
-                <a class="btn btn-outline-success" href="#">View</a>
+                <a class="btn btn-outline-success" href="{% url 'product' product.id %}">View</a>
                 <h4 style="display: inline-block; float: right;">${{product.price|floatformat:2}}</h4>
             </div>
         </div>
@@ -21,5 +40,7 @@
         {% endfor %}
  
     </div>
+
+</div>
 
 {% endblock %}

@@ -1,0 +1,121 @@
+{% extends 'store/main.html' %}
+
+{% block content %}
+
+<style>
+
+    .review-form{
+        padding-left: 20px;
+        padding-bottom: 30px;
+    }
+
+    .review-wrapper{
+        padding-left: 20px;
+    }
+
+    .page-wrapper{
+        display: grid;
+        grid-template-columns: 1fr 5fr;
+    }
+
+    .category{
+        background-color: #e4ecec;
+        border-radius: 10px;
+    }
+
+    .product-name{
+        display: grid;
+        justify-content: center;
+    }
+
+    .product-container{
+        display: grid;
+    }
+
+    .product-details{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        justify-content: center;
+    }
+
+    .product-img{
+        padding: 12px;
+        display: grid;
+        justify-content: center;
+    }
+
+    #product-pic{
+        height: 400px;
+        width: 400px;
+        border: 1px solid #B2BEB5;
+    }
+
+    .product-description{
+        display: grid;
+        padding: 12px;
+    }
+
+</style>
+
+
+<div class="page-wrapper">
+    <div class="category">
+        <h3>All categories</h3>
+        {% for category in categories %}
+        <a class="category-links" href="{% url 'store' %}?q={{category.name}}">{{category.name}}<br></a>
+        {% endfor %}
+    </div>
+
+    <div class="product-container">
+        <div class="product-name">
+            <h1 class="name">{{product.name}}</h1>
+        </div>
+        <div class="product-details">
+            <div class="product-img">
+                <img id="product-pic" class="thumbnail" src="{{product.imageURL}}">
+            </div>
+            <div class="product-description">
+                <div>
+                    <h4 style="display: inline-block;">Price : ${{product.price|floatformat:2}}</h4>
+                    <h5>Category : {{product.category}}</h5>
+                </div>
+                <div>
+                    <h5>Product details of {{product.name}} : </h5>
+                    <p>{{product.description}}</p>
+                </div>
+                <div>
+                    <button data-product={{product.id}} data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to cart</button>
+                </div>
+    
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="review-wrapper">
+            <h3>Reviews</h3>
+            <hr>
+
+            {% for review in reviews %}
+                <div>
+                    <small>@{{review.customer}} -- {{review.created|timesince}} ago</small>
+                    {% if request.user.customer == review.customer %}
+                        <a href="{% url 'delete-review' review.id %}">Delete</a>
+                    {% endif %}
+                    <p>{{review.body}}</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if request.user.is_authenticated %}
+        <div class="review-form">
+            <form method="POST" action="">
+                {% csrf_token %}
+                <input type="text" name="body" placeholder="Write your review here ....">
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
