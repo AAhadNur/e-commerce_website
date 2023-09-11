@@ -113,6 +113,56 @@ I have developed a simple e-commerce website using Django, which I would like to
     - Complete the payment process securely using PayPal.
     - Once payment is confirmed, the order will be placed.
 
+### Some screenshots of the project :
+
+<table width="100%"> 
+    <tr>
+        <td width="50%">      
+            &nbsp; 
+            <br>
+            <p align="center">
+            Home / Store page
+            </p>
+            <img src="https://github.com/AAhadNur/e-commerce_website/blob/main/static/images/D-store.png">
+    </tr>
+    <tr>
+        <td width="50%">      
+            &nbsp; 
+            <br>
+            <p align="center">
+            Product Details
+            </p>
+            <img src="https://github.com/AAhadNur/e-commerce_website/blob/main/static/images/D-product.png">
+    </tr>
+    <tr>
+        <td width="50%">      
+            &nbsp; 
+            <br>
+            <p align="center">
+            Shopping Cart
+            </p>
+            <img src="https://github.com/AAhadNur/e-commerce_website/blob/main/static/images/D-cart.png">
+    </tr>
+    <tr>
+        <td width="50%">      
+            &nbsp; 
+            <br>
+            <p align="center">
+            Check out
+            </p>
+            <img src="https://github.com/AAhadNur/e-commerce_website/blob/main/static/images/D-checkout.png">
+    </tr>
+    <tr>
+        <td width="50%">      
+            &nbsp; 
+            <br>
+            <p align="center">
+            Paypal payment gateway
+            </p>
+            <img src="https://github.com/AAhadNur/e-commerce_website/blob/main/static/images/D-paypal.png">
+    </tr>
+</table>
+
 ## Contributing
 
 We welcome contributions to improve Daintree! If you'd like to contribute, please follow these steps:
