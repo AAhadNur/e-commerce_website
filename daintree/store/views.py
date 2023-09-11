@@ -15,6 +15,7 @@ from .utils import cartData, guestOrder
 
 # Create your views here.
 
+
 def loginPage(request):
     page = 'login'
 
@@ -35,7 +36,7 @@ def loginPage(request):
         else:
             messages.error(request, 'Username or Password is incorrect.')
 
-    context = {'page':page}
+    context = {'page': page}
     return render(request, 'store/login.html', context)
 
 
@@ -59,9 +60,8 @@ def registerUser(request):
         else:
             messages.error(request, 'An error occured during registration.')
 
-    context = {'form':form}
+    context = {'form': form}
     return render(request, 'store/login_register.html', context)
-
 
 
 def store(request):
@@ -77,9 +77,10 @@ def store(request):
         Q(category__name__icontains=q) |
         Q(name__icontains=q) |
         Q(description__icontains=q)
-        )
+    )
 
-    context = {'products':products, 'cartItems':cartItems, 'categories':categories}
+    context = {'products': products,
+               'cartItems': cartItems, 'categories': categories}
     return render(request, 'store/store.html', context)
 
 
@@ -94,14 +95,14 @@ def individualProduct(request, pk):
 
     if request.method == "POST":
         review = Review.objects.create(
-            customer = request.user.customer, 
-            product = product,
-            body = request.POST.get('body')
+            customer=request.user.customer,
+            product=product,
+            body=request.POST.get('body')
         )
         return redirect('product', pk=product.id)
-    
 
-    context = {'product':product, 'cartItems':cartItems, 'categories':categories, 'reviews':reviews}
+    context = {'product': product, 'cartItems': cartItems,
+               'categories': categories, 'reviews': reviews}
     return render(request, 'store/product.html', context)
 
 
@@ -118,7 +119,6 @@ def deleteReview(request, pk):
     return render(request, 'store/delete.html', {'obj': review})
 
 
-
 def cart(request):
 
     data = cartData(request)
@@ -126,10 +126,9 @@ def cart(request):
     cartItems = data['cartItems']
     order = data['order']
     items = data['items']
-    
-    context = {'items':items, 'order':order, 'cartItems':cartItems}
-    return render(request, 'store/cart.html', context)
 
+    context = {'items': items, 'order': order, 'cartItems': cartItems}
+    return render(request, 'store/cart.html', context)
 
 
 def checkout(request):
@@ -139,35 +138,34 @@ def checkout(request):
     cartItems = data['cartItems']
     order = data['order']
     items = data['items']
-    
-    context = {'items':items, 'order':order, 'cartItems':cartItems}
+
+    context = {'items': items, 'order': order, 'cartItems': cartItems}
 
     return render(request, 'store/checkout.html', context)
-
 
 
 def updateItem(request):
     data = json.loads(request.body)
     productID = data['productID']
     action = data['action']
-    print('ProductID :', productID)
-    print('Action :', action)
 
     customer = request.user.customer
     product = Product.objects.get(id=productID)
-    order, created = Order.objects.get_or_create(customer=customer, complete=False)
-    orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
+    order, created = Order.objects.get_or_create(
+        customer=customer, complete=False)
+    orderItem, created = OrderItem.objects.get_or_create(
+        order=order, product=product)
 
     if action == 'add':
         orderItem.quantity = (orderItem.quantity + 1)
     elif action == 'remove':
         orderItem.quantity = (orderItem.quantity - 1)
-    
+
     orderItem.save()
 
     if orderItem.quantity <= 0:
         orderItem.delete()
-    
+
     return JsonResponse('Item was added', safe=False)
 
 
@@ -177,7 +175,8 @@ def processOrder(request):
 
     if request.user.is_authenticated:
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        order, created = Order.objects.get_or_create(
+            customer=customer, complete=False)
 
     else:
         customer, order = guestOrder(request, data)
@@ -191,12 +190,12 @@ def processOrder(request):
 
     if order.shipping == True:
         ShippingAddress.objects.create(
-            customer = customer,
-            order = order,
-            address = data['shipping']['address'],
-            city = data['shipping']['city'],
-            state = data['shipping']['state'],
-            zipcode = data['shipping']['zipcode'],
+            customer=customer,
+            order=order,
+            address=data['shipping']['address'],
+            city=data['shipping']['city'],
+            state=data['shipping']['state'],
+            zipcode=data['shipping']['zipcode'],
         )
 
     return JsonResponse('Payment complete!', safe=False)
