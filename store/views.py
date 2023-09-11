@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.core.paginator import Paginator
 import json
 import datetime
 
@@ -73,11 +74,15 @@ def store(request):
 
     cartItems = data['cartItems']
 
-    products = Product.objects.filter(
-        Q(category__name__icontains=q) |
-        Q(name__icontains=q) |
-        Q(description__icontains=q)
+    p = Paginator(
+        Product.objects.filter(
+            Q(category__name__icontains=q) |
+            Q(name__icontains=q) |
+            Q(description__icontains=q)
+        ), 6
     )
+    page = request.GET.get('page')
+    products = p.get_page(page)
 
     context = {'products': products,
                'cartItems': cartItems, 'categories': categories}
