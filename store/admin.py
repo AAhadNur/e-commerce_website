@@ -11,5 +11,3 @@ admin.site.register(OrderItem)
 admin.site.register(ShippingAddress)
 admin.site.register(Category)
 admin.site.register(Review)
-
-# (SU) Emily, emilyblack@gmail.com, 11Boobs$

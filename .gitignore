@@ -1,0 +1,28 @@
+### Django ###
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+
+### Django Migration Files
+*/migrations/
+
+
+### Demo Folders
+demo/
+
+
+### Static and Media Files
+static/
+media/
+
+
+### Editor files
+.vscode/
+
+
+# Environments
+.env
+venv/
