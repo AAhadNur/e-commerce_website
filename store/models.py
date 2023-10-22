@@ -76,6 +76,11 @@ class Order(models.Model):
         total = sum([item.quantity for item in orderitems])
         return total
 
+    @property
+    def get_order_items(self):
+        orderitems = self.orderitem.all()
+        return orderitems
+
 
 class OrderItem(models.Model):
     product = models.ForeignKey(

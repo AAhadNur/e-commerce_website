@@ -191,6 +191,11 @@ def processOrder(request):
 
     if total == order.get_cart_total:
         order.complete = True
+        if request.user.is_authenticated:
+            OrderHistory.objects.create(
+                customer=request.user.customer,
+                order=order
+            )
     order.save()
 
     if order.shipping == True:
@@ -207,7 +212,23 @@ def processOrder(request):
 
 
 def profile(request, pk):
+
+    data = cartData(request)
+
+    cartItems = data['cartItems']
+    order = data['order']
+    items = data['items']
+
     customer = Customer.objects.get(id=pk)
     history = customer.history.all()
-    print(history)
-    return render(request, 'store/profile.html')
+
+    for h in history:
+        print(h.order.get_cart_total)
+
+    context = {
+        'cartItems': cartItems,
+        'order': order,
+        'items': items,
+        'history': history,
+    }
+    return render(request, 'store/profile.html', context)

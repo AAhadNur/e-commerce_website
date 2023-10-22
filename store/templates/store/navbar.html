@@ -18,7 +18,11 @@
         </form> &nbsp &nbsp
         <div class="form-inline my-2 my-lg-0">
             {% if request.user.is_authenticated %}
-            <h4 style="color: bisque;">Hello {{request.user.username}}</h4> &nbsp &nbsp
+            <h4 style="color: bisque;">Hello 
+                <a href="{% url 'profile' request.user.id %}" style="color: blanchedalmond;">
+                    {{request.user.username}}
+                </a>
+            </h4> &nbsp &nbsp
             <a href="{% url 'logout' %}"class="btn btn-warning">Logout</a> &nbsp &nbsp
             {% else %}
             <a href="{% url 'login' %}"class="btn btn-warning">Login</a> &nbsp &nbsp
