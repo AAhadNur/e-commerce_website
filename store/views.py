@@ -96,7 +96,7 @@ def individualProduct(request, pk):
 
     cartItems = data['cartItems']
     product = Product.objects.get(id=pk)
-    reviews = product.review_set.all()
+    reviews = product.review.all()
 
     if request.method == "POST":
         review = Review.objects.create(
@@ -204,3 +204,10 @@ def processOrder(request):
         )
 
     return JsonResponse('Payment complete!', safe=False)
+
+
+def profile(request, pk):
+    customer = Customer.objects.get(id=pk)
+    history = customer.history.all()
+    print(history)
+    return render(request, 'store/profile.html')

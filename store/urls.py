@@ -8,6 +8,7 @@ urlpatterns = [
     path('login/', views.loginPage, name="login"),
     path('logout/', views.logoutUser, name="logout"),
     path('register/', views.registerUser, name="register"),
+    path('profile/<int:pk>/', views.profile, name="profile"),
 
     path('', views.store, name="store"),
     path('cart/', views.cart, name="cart"),
@@ -18,4 +19,6 @@ urlpatterns = [
     path('process_order/', views.processOrder, name="process_order"),
 
     path('delete-review/<str:pk>/', views.deleteReview, name="delete-review"),
+
+
 ]

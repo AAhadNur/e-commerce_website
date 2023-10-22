@@ -76,11 +76,15 @@
             </div>
             <div class="product-description">
                 <div>
-                    <h4 style="display: inline-block;">Price : ${{product.price|floatformat:2}}</h4>
-                    <h5>Category : {{product.category}}</h5>
+                    <h4 style="display: inline-block;">Price : 
+                        <strong>
+                            ${{product.price|floatformat:2}}
+                        </strong></h4>
+                    <h6>Category : {{product.category}}</h6>
                 </div>
                 <div>
-                    <h5>Product details of {{product.name}} : </h5>
+                    <h4>Stock : <strong style="color: green;">{{product.stock}}</strong></h4>
+                    <h5>Product details : </h5>
                     <p>{{product.description}}</p>
                 </div>
                 <div>

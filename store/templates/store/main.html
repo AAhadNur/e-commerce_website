@@ -55,46 +55,21 @@
 </head>
 <body>
 
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-	  <a class="navbar-brand" href="{% url 'store' %}">Daintree</a>
-	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-	    <span class="navbar-toggler-icon"></span>
-	  </button>
+	{% include 'store/navbar.html' %}
 
-	    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-	        <ul class="navbar-nav mr-auto">
-	            <li class="nav-item active">
-	                <a class="nav-link" href="{% url 'store' %}">Store <span class="sr-only">(current)</span></a>
-	            </li>
-            </ul>
-			<form method="GET" action="{% url 'store' %}">
-				<input type="text" name="q" placeholder="Search Products ...">
-			</form>
-            <div class="form-inline my-2 my-lg-0">
-				{% if request.user.is_authenticated %}
-				<h4>Hello {{request.user.username}}</h4>
-				<a href="{% url 'logout' %}"class="btn btn-warning">Logout</a>
-				{% else %}
-                <a href="{% url 'login' %}"class="btn btn-warning">Login</a>
-				{% endif %}
-                
-                <a href="{% url 'cart' %}">
-                   <img  id="cart-icon" src="{% static 'images/cart.png' %}">
-               </a>
-               <p id="cart-total">{{cartItems}}</p>
-   
-            </div>
-	    </div>
-	</nav>
-
-     <div class="container">
+     <div class="contents">
 
 		{% if messages %}
-			<ul class="messages">
-				{% for mesasge in messages %}
-					<li>{{mesasge}}</li>
-				{% endfor %}
-			</ul>
+		<div id="messages" class="mb-4">
+			{% for message in messages %}
+				<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+					<span class="block sm:inline">{{ message }}</span>
+					<span class="absolute top-0 bottom-0 right-0 px-4 py-3 close-btn cursor-pointer">
+						<svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.293 5.293a1 1 0 011.414 1.414L11.414 10l4.293 4.293a1 1 0 11-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 111.414-1.414L10 8.586l4.293-4.293z"/></svg>
+					</span>
+				</div>
+			{% endfor %}
+		</div>
 		{% endif %}
 
 		<br>
@@ -112,6 +87,19 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
 	<script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+
+	<script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const closeButtons = document.querySelectorAll(".close-btn");
+    
+            closeButtons.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    const message = button.closest(".relative");
+                    message.style.display = "none";
+                });
+            });
+        });
+    </script>  
 
 </body>
 </html>

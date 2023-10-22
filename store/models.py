@@ -26,6 +26,8 @@ class Product(models.Model):
     name = models.CharField(max_length=200, null=True)
     price = models.DecimalField(max_digits=9, decimal_places=2)
     description = models.TextField(null=True, blank=True)
+    stock = models.IntegerField(default=10, null=True)
+    featured = models.BooleanField(default=False, null=True, blank=True)
     digital = models.BooleanField(default=False, null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
     category = models.ForeignKey(
@@ -45,18 +47,18 @@ class Product(models.Model):
 
 class Order(models.Model):
     customer = models.ForeignKey(
-        Customer, on_delete=models.SET_NULL, null=True, blank=True)
+        Customer, related_name="order", on_delete=models.SET_NULL, null=True, blank=True)
     date_ordered = models.DateTimeField(auto_now_add=True)
     complete = models.BooleanField(default=False, null=True, blank=True)
     transaction_id = models.CharField(max_length=200, null=True)
 
     def __str__(self):
-        return str(self.id)
+        return str(self.transaction_id)
 
     @property
     def shipping(self):
         shipping = False
-        orderitems = self.orderitem_set.all()
+        orderitems = self.orderitem.all()
         for i in orderitems:
             if i.product.digital == False:
                 shipping = True
@@ -64,22 +66,22 @@ class Order(models.Model):
 
     @property
     def get_cart_total(self):
-        orderitems = self.orderitem_set.all()
+        orderitems = self.orderitem.all()
         total = sum([item.get_total for item in orderitems])
         return total
 
     @property
     def get_cart_items(self):
-        orderitems = self.orderitem_set.all()
+        orderitems = self.orderitem.all()
         total = sum([item.quantity for item in orderitems])
         return total
 
 
 class OrderItem(models.Model):
     product = models.ForeignKey(
-        Product, on_delete=models.SET_NULL, null=True, blank=True)
+        Product, related_name="orderitem", on_delete=models.SET_NULL, null=True, blank=True)
     order = models.ForeignKey(
-        Order, on_delete=models.SET_NULL, null=True, blank=True)
+        Order, related_name="orderitem", on_delete=models.SET_NULL, null=True, blank=True)
     quantity = models.IntegerField(default=0, null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
@@ -94,9 +96,9 @@ class OrderItem(models.Model):
 
 class ShippingAddress(models.Model):
     customer = models.ForeignKey(
-        Customer, on_delete=models.SET_NULL, null=True, blank=True)
+        Customer, related_name="shippingaddress", on_delete=models.SET_NULL, null=True, blank=True)
     order = models.ForeignKey(
-        Order, on_delete=models.SET_NULL, null=True, blank=True)
+        Order, related_name="shippingaddress", on_delete=models.SET_NULL, null=True, blank=True)
     address = models.CharField(max_length=200, null=True, blank=True)
     city = models.CharField(max_length=200, null=True, blank=True)
     state = models.CharField(max_length=200, null=True, blank=True)
@@ -107,8 +109,10 @@ class ShippingAddress(models.Model):
 
 
 class Review(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    customer = models.ForeignKey(
+        Customer, related_name="review", on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product, related_name="review", on_delete=models.CASCADE)
     body = models.TextField(max_length=350)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -118,3 +122,17 @@ class Review(models.Model):
 
     def __str__(self):
         return str(self.body)
+
+
+class OrderHistory(models.Model):
+    customer = models.ForeignKey(
+        Customer, related_name="history", on_delete=models.CASCADE)
+    order = models.OneToOneField(
+        Order, related_name="history", on_delete=models.CASCADE)
+    date_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-date_time']
+
+    def __str__(self):
+        return self.order
