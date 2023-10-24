@@ -8,11 +8,13 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.core.paginator import Paginator
+from sslcommerz_lib import SSLCOMMERZ
 import json
 import datetime
 
 from .models import *
 from .utils import cartData, guestOrder
+from daintree.settings import SSL_STORE_ID, SSL_STORE_PASSWOED, SSL_VERIFY_KEY, SSL_VERIFY_SIGN, SSL_VERIFY_SIGN_SHA, SSL_VAL_ID
 
 # Create your views here.
 
@@ -232,3 +234,47 @@ def profile(request, pk):
         'history': history,
     }
     return render(request, 'store/profile.html', context)
+
+
+def ssl_payment(request, pk):
+    credentials = {'store_id': SSL_STORE_ID,
+                   'store_pass': SSL_STORE_PASSWOED, 'issandbox': True}
+    sslcz = SSLCOMMERZ(credentials)
+
+    order = Order.objects.get(id=pk)
+
+    post_body = {}
+
+    post_body['verify_sign'] = SSL_VERIFY_SIGN
+    post_body['verify_key'] = SSL_VERIFY_KEY
+    post_body['verify_sign_sha2'] = SSL_VERIFY_SIGN_SHA
+    post_body['val_id'] = SSL_VAL_ID
+    post_body['total_amount'] = order.get_cart_total
+    post_body['num_of_item'] = order.get_cart_items
+    post_body['cus_name'] = order.customer.name
+    post_body['cus_email'] = order.customer.email
+    post_body['cus_phone'] = "01700000000"
+    post_body['cus_add1'] = "Nabinbagh"
+    post_body['cus_city'] = "Dhaka"
+    post_body['cus_country'] = "Bangladesh"
+    post_body['currency'] = "BDT"
+    post_body['tran_id'] = "12345"
+    post_body['success_url'] = "/profile/"
+    post_body['fail_url'] = "/store/"
+    post_body['cancel_url'] = "/cart/"
+    post_body['emi_option'] = 0
+    post_body['shipping_method'] = "NO"
+    post_body['multi_card_name'] = ""
+    post_body['product_name'] = "Test"
+    post_body['product_category'] = "Test Category"
+    post_body['product_profile'] = "general"
+
+    # if sslcz.hash_validate_ipn(post_body):
+    #     response = sslcz.validationTransactionOrder(post_body['val_id'])
+    #     print(response)
+    #     messages.success(request, "Thanks for shopping!!!")
+    # else:
+    #     messages.error(request, "An unexpected error occured.")
+    response = sslcz.createSession(post_body)
+    print(response)
+    return redirect('store')

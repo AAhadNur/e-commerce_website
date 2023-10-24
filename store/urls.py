@@ -20,5 +20,5 @@ urlpatterns = [
 
     path('delete-review/<str:pk>/', views.deleteReview, name="delete-review"),
 
-
+    path('mobile-payment/<int:pk>/', views.ssl_payment, name="ssl"),
 ]

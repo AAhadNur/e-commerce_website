@@ -1,15 +1,33 @@
 
-from pathlib import Path
+
 import os
+from pathlib import Path
+from decouple import AutoConfig
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-oem-qmei!i$=hv(@@00z-qg0ha(eyte3x#xt^(y#6yb%d@bwdh'
+ENV_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ENV_FILE = os.path.join(ENV_BASE_DIR, '..', '.env')
 
-DEBUG = True
+config = AutoConfig(search_path=ENV_FILE)
+
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = config('SECRET_KEY')
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ['127.0.0.1']
+
+# SSL Credentials
+SSL_STORE_ID = config('SSL_STORE_ID')
+SSL_STORE_PASSWOED = config('SSL_STORE_PASSWOED')
+SSL_VERIFY_KEY = config('SSL_VERIFY_KEY')
+SSL_VERIFY_SIGN = config('SSL_VERIFY_SIGN')
+SSL_VERIFY_SIGN_SHA = config('SSL_VERIFY_SIGN_SHA')
+SSL_VAL_ID = config('SSL_VAL_ID')
 
 
 # Application definition

@@ -46,7 +46,13 @@
 
         <br>
         <div class="box-element hidden" id="payment-info">
-            <small>Paypal Options</small>
+            <small>SSL Services :: </small>
+            <div>
+                <a href="{% url 'ssl' order.id %}">
+                    <button style="background-color: brown; color: bisque;">Mobile Banking</button>
+                </a>
+            </div>
+            <small>Paypal Options :: </small>
             <div id="paypal-button-container">
 
             </div>
